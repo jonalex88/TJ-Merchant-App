@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 213 39% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 213 39% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 213 39% 11%;
+    --primary: 213 39% 11%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 213 39% 11%;
+    --muted: 210 15% 94%;
+    --muted-foreground: 215 14% 46%;
+    --accent: 166 100% 39%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 20% 90%;
+    --input: 214 20% 90%;
+    --ring: 166 100% 39%;
+    --radius: 1rem;
+    --coral: 0 72% 55%;
+    --amber: 38 92% 55%;
+    --navy: 213 39% 11%;
+    --teal: 166 100% 39%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@keyframes ripple-effect {
+  0% { transform: scale(0); opacity: 0.4; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 0.3; }
+  100% { transform: scale(0.8); opacity: 0.8; }
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, hsl(var(--muted)) 25%, hsl(var(--muted) / 0.5) 50%, hsl(var(--muted)) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+}
+
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+.ripple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, hsl(var(--teal) / 0.15) 10%, transparent 70%);
+  transform: scale(0);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.ripple:active::after {
+  animation: ripple-effect 0.5s ease-out;
+}
