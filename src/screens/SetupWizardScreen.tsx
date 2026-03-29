@@ -157,7 +157,7 @@ const SetupWizardScreen = ({ onComplete, stores }: SetupWizardScreenProps) => {
                   return (
                     <div key={storeId} className="bg-card rounded-xl border border-border p-4">
                       <label className="text-xs font-semibold text-muted-foreground block mb-2">
-                        {store.displayName}
+                        {store.storeId} · {store.displayName}
                       </label>
                       <div className="relative">
                         <Pencil size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />

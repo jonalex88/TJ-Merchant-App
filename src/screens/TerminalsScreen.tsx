@@ -64,7 +64,7 @@ const TerminalsScreen = ({
     <div className="px-4 pt-4 pb-6 overflow-y-auto h-full">
       <div className="flex items-center justify-between mb-4 gap-3">
         <h1 className="text-lg font-bold text-foreground">Payment Terminals</h1>
-        <SiteFilterDropdown selectedStores={filterStores} onStoresChange={setFilterStores} storeOverrides={storeOverrides} />
+        <SiteFilterDropdown selectedStores={filterStores} onStoresChange={setFilterStores} storeOverrides={storeOverrides} managedStores={selectedStoreIds} />
       </div>
       <p className="text-xs text-muted-foreground mb-4">Sorted by last activity — most recent first</p>
 

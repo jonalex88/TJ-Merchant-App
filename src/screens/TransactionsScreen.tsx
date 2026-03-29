@@ -56,7 +56,7 @@ const TransactionsScreen = ({
               )}
             </div>
           </div>
-          <SiteFilterDropdown selectedStores={filterStores} onStoresChange={setFilterStores} storeOverrides={storeOverrides} />
+          <SiteFilterDropdown selectedStores={filterStores} onStoresChange={setFilterStores} storeOverrides={storeOverrides} managedStores={selectedStoreIds} />
         </div>
         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1 items-center">
           {filterChips.map(chip => (

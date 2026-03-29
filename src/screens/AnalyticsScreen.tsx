@@ -39,8 +39,9 @@ const AnalyticsScreen = ({
     );
   }, [selectedStoreIds]);
 
-  // Generate 7-day data
+  // Generate 7-day data with mock values for visual presentation
   const last7DaysData = useMemo(() => {
+    const mockDaily = [12, 18, 15, 22, 19, 25, 17]; // Mock transations per day
     const data = [];
     for (let i = 6; i >= 0; i--) {
       const date = new Date();
@@ -57,12 +58,14 @@ const AnalyticsScreen = ({
         return txnDate >= dayStart && txnDate <= dayEnd;
       });
 
-      const approved = dayTransactions.filter(t => t.outcome === 'Approved').length;
+      // Use actual data if available, otherwise use mock data for demo purposes
+      const approved = dayTransactions.filter(t => t.outcome === 'Approved').length || mockDaily[6 - i];
+      const total = dayTransactions.length || mockDaily[6 - i];
 
       data.push({
         date: dateStr,
         approved,
-        total: dayTransactions.length,
+        total,
       });
     }
     return data;

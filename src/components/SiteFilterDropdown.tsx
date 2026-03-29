@@ -7,9 +7,10 @@ interface SiteFilterDropdownProps {
   selectedStores: string[];
   onStoresChange: (storeIds: string[]) => void;
   storeOverrides: Record<string, string>;
+  managedStores: string[];
 }
 
-const SiteFilterDropdown = ({ selectedStores, onStoresChange, storeOverrides }: SiteFilterDropdownProps) => {
+const SiteFilterDropdown = ({ selectedStores, onStoresChange, storeOverrides, managedStores }: SiteFilterDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -64,7 +65,7 @@ const SiteFilterDropdown = ({ selectedStores, onStoresChange, storeOverrides }: 
               </button>
 
               {/* Site options */}
-              {stores.map(store => (
+              {stores.filter(store => managedStores.includes(store.storeId)).map(store => (
                 <button key={store.storeId} onClick={() => toggleStore(store.storeId)}
                   className={`w-full px-3 py-2 rounded-lg text-sm text-left font-medium transition-colors flex items-center justify-between ${
                     selectedStores.includes(store.storeId)
