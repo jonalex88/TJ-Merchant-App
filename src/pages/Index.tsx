@@ -122,17 +122,17 @@ const Index = () => {
 
   if (authState === 'signin') {
     return (
-      <MobileFrame>
+      <div className="w-full h-screen flex items-center justify-center bg-background">
         <SignInScreen onSignIn={handleSignIn} />
-      </MobileFrame>
+      </div>
     );
   }
 
   if (authState === 'setup') {
     return (
-      <MobileFrame>
+      <div className="w-full h-screen flex items-center justify-center bg-background">
         <SetupWizardScreen onComplete={handleSetupComplete} stores={stores} />
-      </MobileFrame>
+      </div>
     );
   }
 
@@ -153,71 +153,46 @@ const Index = () => {
   ];
 
   return (
-    <MobileFrame>
-      <div className="flex flex-col h-full">
-        <div className="flex-1 overflow-hidden">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
-              className="h-full overflow-y-auto"
-            >
-              {screens[activeTab]}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Bottom Navigation */}
-        <nav className="shrink-0 bg-card border-t border-border px-2 pb-1 pt-1">
-          <div className="flex justify-around">
-            {tabs.map((tab, i) => {
-              const Icon = tab.icon;
-              const isActive = i === activeTab;
-              return (
-                <button key={tab.label} onClick={() => setActiveTab(i)}
-                  className="flex flex-col items-center gap-0.5 py-2 px-3 rounded-lg transition-colors relative active:scale-95"
-                >
-                  <Icon size={20} className={isActive ? 'text-accent' : 'text-muted-foreground'} />
-                  <span className={`text-[10px] font-medium ${isActive ? 'text-accent' : 'text-muted-foreground'}`}>
-                    {tab.label}
-                  </span>
-                  {isActive && (
-                    <motion.div layoutId="nav-dot" className="absolute -bottom-0.5 w-1 h-1 rounded-full bg-accent" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </nav>
+    <div className="flex flex-col h-screen w-full bg-background">
+      {/* Main Content - Scrollable */}
+      <div className="flex-1 overflow-y-auto pb-24">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.2 }}
+            className="w-full h-full"
+          >
+            {screens[activeTab]}
+          </motion.div>
+        </AnimatePresence>
       </div>
-    </MobileFrame>
+
+      {/* Sticky Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border px-2 py-3 shadow-2xl">
+        <div className="flex justify-around max-w-full">
+          {tabs.map((tab, i) => {
+            const Icon = tab.icon;
+            const isActive = i === activeTab;
+            return (
+              <button key={tab.label} onClick={() => setActiveTab(i)}
+                className="flex flex-col items-center gap-0.5 py-2 px-3 rounded-lg transition-colors relative active:scale-95"
+              >
+                <Icon size={20} className={isActive ? 'text-accent' : 'text-muted-foreground'} />
+                <span className={`text-[10px] font-medium ${isActive ? 'text-accent' : 'text-muted-foreground'}`}>
+                  {tab.label}
+                </span>
+                {isActive && (
+                  <motion.div layoutId="nav-dot" className="absolute -bottom-0.5 w-1 h-1 rounded-full bg-accent" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </nav>
+    </div>
   );
 };
-
-const MobileFrame = ({ children }: { children: React.ReactNode }) => (
-  <div className="min-h-screen bg-muted flex items-center justify-center p-4">
-    <div className="w-[390px] h-[844px] bg-background rounded-[40px] shadow-2xl overflow-hidden border-[6px] border-foreground/10 flex flex-col relative">
-      {/* Status bar */}
-      <div className="h-12 flex items-center justify-between px-8 shrink-0">
-        <span className="text-xs font-semibold text-foreground">9:41</span>
-        <div className="flex gap-1.5 items-center">
-          <div className="w-4 h-2.5 border border-foreground/60 rounded-sm relative">
-            <div className="absolute inset-[1px] right-[2px] bg-foreground/60 rounded-[1px]" />
-          </div>
-        </div>
-      </div>
-      <div className="flex-1 overflow-hidden">
-        {children}
-      </div>
-      {/* Home indicator */}
-      <div className="h-5 flex items-center justify-center shrink-0">
-        <div className="w-32 h-1 bg-foreground/20 rounded-full" />
-      </div>
-    </div>
-  </div>
-);
-
 export default Index;
