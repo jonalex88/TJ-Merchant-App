@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, Copy, Check, ChevronDown } from 'lucide-react';
 import StatusPill from '@/components/StatusPill';
 import StoreAvatar from '@/components/StoreAvatar';
+import SiteFilterDropdown from '@/components/SiteFilterDropdown';
 import { transactions, stores, getStoreName, formatZAR } from '@/data/mockData';
 import { Transaction } from '@/types';
 
@@ -19,6 +20,7 @@ const TransactionsScreen = ({
   const [activeFilter, setActiveFilter] = useState('All');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [filterStores, setFilterStores] = useState<string[]>([]);
 
   const filtered = transactions.filter(txn => {
     const name = getStoreName(txn.storeId, storeOverrides);
@@ -27,7 +29,8 @@ const TransactionsScreen = ({
       txn.outcome === activeFilter ||
       txn.type === activeFilter;
     const matchesStore = selectedStoreIds.length === 0 || selectedStoreIds.includes(txn.storeId);
-    return matchesSearch && matchesFilter && matchesStore;
+    const matchesScreenFilter = filterStores.length === 0 || filterStores.includes(txn.storeId);
+    return matchesSearch && matchesFilter && matchesStore && matchesScreenFilter;
   });
 
   const handleCopy = (id: string) => {
@@ -40,17 +43,20 @@ const TransactionsScreen = ({
     <div className="flex flex-col h-full">
       {/* Sticky search */}
       <div className="sticky top-0 z-10 bg-background px-4 pt-4 pb-2 space-y-3">
-        <div className="relative">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <input value={search} onChange={e => setSearch(e.target.value)}
-            placeholder="Search transactions..."
-            className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-secondary border border-border text-sm focus:outline-none focus:ring-2 focus:ring-accent/40" />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-            <Filter size={14} className="text-muted-foreground" />
-            {activeFilter !== 'All' && (
-              <span className="w-4 h-4 rounded-full bg-accent text-accent-foreground text-[10px] flex items-center justify-center font-bold">1</span>
-            )}
+        <div className="flex items-center justify-between gap-3">
+          <div className="relative flex-1">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input value={search} onChange={e => setSearch(e.target.value)}
+              placeholder="Search transactions..."
+              className="w-full pl-9 pr-10 py-2.5 rounded-xl bg-secondary border border-border text-sm focus:outline-none focus:ring-2 focus:ring-accent/40" />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+              <Filter size={14} className="text-muted-foreground" />
+              {activeFilter !== 'All' && (
+                <span className="w-4 h-4 rounded-full bg-accent text-accent-foreground text-[10px] flex items-center justify-center font-bold">1</span>
+              )}
+            </div>
           </div>
+          <SiteFilterDropdown selectedStores={filterStores} onStoresChange={setFilterStores} storeOverrides={storeOverrides} />
         </div>
         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1 items-center">
           {filterChips.map(chip => (

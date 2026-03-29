@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Activity, Bell, BellOff } from 'lucide-react';
+import SiteFilterDropdown from '@/components/SiteFilterDropdown';
 import { terminals, stores, getStoreName, formatZAR, transactions } from '@/data/mockData';
 import { toast } from 'sonner';
 
@@ -36,6 +37,7 @@ const TerminalsScreen = ({
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [mutedTerminals, setMutedTerminals] = useState<Set<string>>(new Set());
+  const [filterStores, setFilterStores] = useState<string[]>([]);
 
   const toggleNotification = (terminalId: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -52,15 +54,17 @@ const TerminalsScreen = ({
     });
   };
 
-  const filteredTerminals = selectedStoreIds.length === 0
+  const filteredTerminals = (selectedStoreIds.length === 0
     ? terminals
-    : terminals.filter(t => selectedStoreIds.includes(t.storeId));
+    : terminals.filter(t => selectedStoreIds.includes(t.storeId))
+  ).filter(t => filterStores.length === 0 || filterStores.includes(t.storeId));
 
   // GET /api/v1/status/terminal → Terminal list
   return (
     <div className="px-4 pt-4 pb-6 overflow-y-auto h-full">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 gap-3">
         <h1 className="text-lg font-bold text-foreground">Payment Terminals</h1>
+        <SiteFilterDropdown selectedStores={filterStores} onStoresChange={setFilterStores} storeOverrides={storeOverrides} />
       </div>
       <p className="text-xs text-muted-foreground mb-4">Sorted by last activity — most recent first</p>
 

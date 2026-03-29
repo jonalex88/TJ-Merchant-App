@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { TrendingUp, ArrowRight, RefreshCw } from 'lucide-react';
 import AnimatedCounter from '@/components/AnimatedCounter';
 import StatusPill from '@/components/StatusPill';
-import StoreAvatar from '@/components/StoreAvatar';
+import SiteAvatar from '@/components/SiteAvatar';
 import DateTimeRangeSelector from '@/components/DateTimeRangeSelector';
 import { metrics, transactions, salesByStore, getStoreName, formatZAR } from '@/data/mockData';
 import { useState, useEffect } from 'react';
@@ -149,7 +149,7 @@ const DashboardScreen = ({ storeOverrides, onNavigate }: { storeOverrides: Recor
         <div className="space-y-2">
           {recentTxns.map(txn => (
             <div key={txn.id} className="flex items-center gap-3 bg-card rounded-xl p-3 shadow-sm border border-border">
-              <StoreAvatar name={getStoreName(txn.storeId, storeOverrides)} size={36} />
+              <SiteAvatar name={getStoreName(txn.storeId, storeOverrides)} size={36} />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-foreground truncate">{getStoreName(txn.storeId, storeOverrides)}</p>
                 <p className="text-[11px] text-muted-foreground">{new Date(txn.timestamp).toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' })}</p>

@@ -1,18 +1,21 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, CreditCard, Monitor, Settings } from 'lucide-react';
+import { Home, CreditCard, Monitor, BarChart3, Settings } from 'lucide-react';
 import SignInScreen from '@/screens/SignInScreen';
 import SetupWizardScreen from '@/screens/SetupWizardScreen';
 import DashboardScreen from '@/screens/DashboardScreen';
 import TransactionsScreen from '@/screens/TransactionsScreen';
 import TerminalsScreen from '@/screens/TerminalsScreen';
+import AnalyticsScreen from '@/screens/AnalyticsScreen';
 import SettingsScreen from '@/screens/SettingsScreen';
-import { stores } from '@/data/mockData';
+import InboxButton from '@/components/InboxButton';
+import { stores, mockMessages } from '@/data/mockData';
 
 const tabs = [
   { label: 'Dashboard', icon: Home },
   { label: 'Transactions', icon: CreditCard },
   { label: 'Terminals', icon: Monitor },
+  { label: 'Analytics', icon: BarChart3 },
   { label: 'Settings', icon: Settings },
 ];
 
@@ -24,19 +27,32 @@ interface UserData {
   tjAccountId: string;
 }
 
+interface Message {
+  id: string;
+  subject: string;
+  content: string;
+  timestamp: Date;
+  isRead: boolean;
+}
+
 const Index = () => {
   const [authState, setAuthState] = useState<'signin' | 'setup' | 'app'>('signin');
   const [activeTab, setActiveTab] = useState(0);
   const [storeOverrides, setStoreOverrides] = useState<Record<string, string>>({});
   const [selectedStoreIds, setSelectedStoreIds] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>(mockMessages);
   const [userData, setUserData] = useState<UserData>({
     username: '',
-    name: 'Sarah Mitchell',
-    email: 'sarah@transpector.co.za',
+    name: 'Jonathan Luies',
+    email: 'jonathanl@switch.tj',
     phone: '+27 (0)21 555 0123',
     tjAccountId: 'TJ-4821-9471',
   });
   const [inactivityTimer, setInactivityTimer] = useState<NodeJS.Timeout | null>(null);
+
+  const handleMarkAsRead = (messageId: string) => {
+    setMessages(prev => prev.map(msg => msg.id === messageId ? { ...msg, isRead: true } : msg));
+  };
 
   // Load persisted data on mount
   useEffect(() => {
@@ -140,6 +156,7 @@ const Index = () => {
     <DashboardScreen key="dash" storeOverrides={storeOverrides} onNavigate={setActiveTab} />,
     <TransactionsScreen key="txns" storeOverrides={storeOverrides} selectedStoreIds={selectedStoreIds} />,
     <TerminalsScreen key="terms" storeOverrides={storeOverrides} selectedStoreIds={selectedStoreIds} />,
+    <AnalyticsScreen key="analytics" storeOverrides={storeOverrides} selectedStoreIds={selectedStoreIds} />,
     <SettingsScreen
       key="settings"
       storeOverrides={storeOverrides}
@@ -154,6 +171,9 @@ const Index = () => {
 
   return (
     <div className="flex flex-col h-screen w-full bg-background">
+      {/* Inbox Button */}
+      <InboxButton messages={messages} onMarkAsRead={handleMarkAsRead} />
+
       {/* Main Content - Scrollable */}
       <div className="flex-1 overflow-y-auto pb-24">
         <AnimatePresence mode="wait">

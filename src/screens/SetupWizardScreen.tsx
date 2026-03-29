@@ -17,8 +17,8 @@ const SetupWizardScreen = ({ onComplete, stores }: SetupWizardScreenProps) => {
   const [error, setError] = useState('');
 
   const steps = [
-    { title: 'Select Stores', description: 'Choose which stores you want to manage' },
-    { title: 'Rename Stores', description: 'Customize store names (optional)' },
+    { title: 'Select Sites', description: 'Choose which sites you want to manage' },
+    { title: 'Rename Sites', description: 'Customize site names (optional)' },
     { title: 'Set PIN', description: 'Create a PIN for security (optional)' },
   ];
 
@@ -38,7 +38,7 @@ const SetupWizardScreen = ({ onComplete, stores }: SetupWizardScreenProps) => {
 
   const handleNext = () => {
     if (!canProceed()) {
-      setError('Please select at least one store');
+      setError('Please select at least one site');
       return;
     }
 
@@ -166,7 +166,7 @@ const SetupWizardScreen = ({ onComplete, stores }: SetupWizardScreenProps) => {
                           value={currentName}
                           onChange={e => updateStoreName(storeId, e.target.value)}
                           className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-secondary border border-border text-sm focus:outline-none focus:ring-2 focus:ring-accent/40"
-                          placeholder="Store name"
+                          placeholder="Site name"
                         />
                       </div>
                     </div>

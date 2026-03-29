@@ -21,9 +21,9 @@ const getTerminalStatus = (lastUsedDate: Date): 'active' | 'recent' | 'dormant' 
 };
 
 export const stores: Store[] = [
-  { storeId: 'STR-00441', displayName: 'The Corner Shop', location: 'Cape Town', retailerId: 'RET-001' },
-  { storeId: 'STR-00442', displayName: 'Harbour Point', location: 'V&A Waterfront', retailerId: 'RET-001' },
-  { storeId: 'STR-00443', displayName: 'Stellenbosch Flagship', retailerId: 'RET-001' },
+  { storeId: 'STR-00441', displayName: '', location: 'Cape Town', retailerId: 'RET-001' },
+  { storeId: 'STR-00442', displayName: '', location: 'V&A Waterfront', retailerId: 'RET-001' },
+  { storeId: 'STR-00443', displayName: '', location: '', retailerId: 'RET-001' },
 ];
 
 export const terminals: Terminal[] = [
@@ -70,3 +70,41 @@ export const getStoreName = (storeId: string, storeOverrides: Record<string, str
 export const formatZAR = (amount: number): string => {
   return 'R ' + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 };
+
+export const mockMessages = [
+  {
+    id: 'msg-1',
+    subject: 'Welcome to Transpector!',
+    content: 'Your merchant account is now active. You can start accepting payments immediately. Visit our help center for setup guides.',
+    timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+    isRead: true,
+  },
+  {
+    id: 'msg-2',
+    subject: 'Store STR-00441 Alert',
+    content: 'No transactions recorded in the last 24 hours. Check if the terminal is online and functional.',
+    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
+    isRead: false,
+  },
+  {
+    id: 'msg-3',
+    subject: 'Payment Approved Rate Update',
+    content: 'Your approval rate improved to 96.5% this week! Continue providing excellent payment experiences to your customers.',
+    timestamp: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
+    isRead: false,
+  },
+  {
+    id: 'msg-4',
+    subject: 'Security Notification',
+    content: 'We detected a new sign-in from a different location. If this wasn\'t you, please update your password immediately.',
+    timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 hours ago
+    isRead: true,
+  },
+  {
+    id: 'msg-5',
+    subject: 'Settlement Report Ready',
+    content: 'Your daily settlement report is ready for download. Total settled: R 145,230.00',
+    timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
+    isRead: false,
+  },
+];

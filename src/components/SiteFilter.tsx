@@ -3,13 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Filter, Check } from 'lucide-react';
 import { stores } from '@/data/mockData';
 
-interface StoreFilterProps {
+interface SiteFilterProps {
   selectedStores: string[];
   setSelectedStores: React.Dispatch<React.SetStateAction<string[]>>;
   storeOverrides: Record<string, string>;
 }
 
-const StoreFilter = ({ selectedStores, setSelectedStores, storeOverrides }: StoreFilterProps) => {
+const SiteFilter = ({ selectedStores, setSelectedStores, storeOverrides }: SiteFilterProps) => {
   const [open, setOpen] = useState(false);
 
   const toggle = (storeId: string) => {
@@ -66,4 +66,4 @@ const StoreFilter = ({ selectedStores, setSelectedStores, storeOverrides }: Stor
   );
 };
 
-export default StoreFilter;
+export default SiteFilter;
