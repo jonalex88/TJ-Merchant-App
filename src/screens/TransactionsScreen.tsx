@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, Copy, Check, ChevronDown } from 'lucide-react';
 import StatusPill from '@/components/StatusPill';
-import StoreAvatar from '@/components/StoreAvatar';
+import SiteAvatar from '@/components/SiteAvatar';
 import SiteFilterDropdown from '@/components/SiteFilterDropdown';
 import { transactions, stores, getStoreName, formatZAR } from '@/data/mockData';
 import { Transaction } from '@/types';
@@ -105,7 +105,7 @@ const TransactionRow = ({ txn, storeOverrides, index, expanded, onToggle, onCopy
       className={`bg-card rounded-xl border border-border shadow-sm overflow-hidden transition-all ${copied ? 'ring-2 ring-accent/40' : ''}`}
     >
       <button onClick={onToggle} className="w-full flex items-center gap-3 p-3 active:bg-secondary/50 transition-colors text-left">
-        <StoreAvatar name={name} size={36} />
+        <SiteAvatar name={name} size={36} />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-foreground truncate">{name}</p>
           <p className="text-[11px] text-muted-foreground">{txn.type} · {txn.maskedPan}</p>
