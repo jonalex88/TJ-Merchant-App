@@ -95,7 +95,7 @@ class MockDataStore {
 
     this.sessions = new Map();
     this.users = new Map([
-      ['demo', { password: 'demo123', data: { username: 'demo', name: 'Sarah Mitchell', email: 'sarah@transpector.co.za', phone: '+27 (0)21 555 0123', tjAccountId: 'TJ-4821-9471' } }],
+      ['demo', { password: 'demo123', data: { username: 'demo', name: 'Jonathan Luies', email: 'jonathanl@switch.tj', phone: '+27 (0)21 555 0123', tjAccountId: 'TJ-4821-9471' } }],
       ['jonathan', { password: 'password123', data: { username: 'jonathan', name: 'Jonathan Doe', email: 'jonathan@transpector.co.za', phone: '+27 (0)82 123 4567', tjAccountId: 'TJ-5000-1234' } }],
       ['test', { password: 'test123', data: { username: 'test', name: 'Test User', email: 'test@transpector.co.za', phone: '+27 (0)73 999 8888', tjAccountId: 'TJ-0001-0001' } }],
     ]);

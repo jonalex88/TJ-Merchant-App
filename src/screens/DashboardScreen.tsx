@@ -7,7 +7,19 @@ import DateTimeRangeSelector from '@/components/DateTimeRangeSelector';
 import { metrics, transactions, salesByStore, getStoreName, formatZAR } from '@/data/mockData';
 import { useState, useEffect } from 'react';
 
-const DashboardScreen = ({ storeOverrides, onNavigate }: { storeOverrides: Record<string, string>; onNavigate: (tab: number) => void }) => {
+interface DashboardScreenProps {
+  storeOverrides: Record<string, string>;
+  onNavigate: (tab: number) => void;
+  userData: {
+    username: string;
+    name: string;
+    email: string;
+    phone: string;
+    tjAccountId: string;
+  };
+}
+
+const DashboardScreen = ({ storeOverrides, onNavigate, userData }: DashboardScreenProps) => {
   const [loaded, setLoaded] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [fromDateTime, setFromDateTime] = useState<Date>(() => {
@@ -38,6 +50,7 @@ const DashboardScreen = ({ storeOverrides, onNavigate }: { storeOverrides: Recor
 
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  const firstName = userData.name?.split(' ')[0] || userData.username || 'there';
 
   const recentTxns = transactions.slice(0, 5);
   const maxSale = Math.max(...salesByStore.map(s => s.sales));
@@ -45,7 +58,7 @@ const DashboardScreen = ({ storeOverrides, onNavigate }: { storeOverrides: Recor
   return (
     <div className="px-4 pt-4 pb-6 space-y-5 overflow-y-auto">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-xl font-bold text-foreground">{greeting}, Sarah 👋</h1>
+        <h1 className="text-xl font-bold text-foreground">{greeting}, {firstName} 👋</h1>
         <p className="text-sm text-muted-foreground mt-0.5">Here's your overview</p>
       </motion.div>
 

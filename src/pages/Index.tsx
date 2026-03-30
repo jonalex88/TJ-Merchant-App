@@ -73,6 +73,13 @@ const Index = () => {
       }
       setAuthState('app');
     }
+
+    const darkMode = localStorage.getItem('darkMode');
+    if (darkMode === 'true') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }, []);
 
   // Inactivity timeout
@@ -153,7 +160,7 @@ const Index = () => {
   }
 
   const screens = [
-    <DashboardScreen key="dash" storeOverrides={storeOverrides} onNavigate={setActiveTab} />,
+    <DashboardScreen key="dash" storeOverrides={storeOverrides} onNavigate={setActiveTab} userData={userData} />,
     <TransactionsScreen key="txns" storeOverrides={storeOverrides} selectedStoreIds={selectedStoreIds} />,
     <TerminalsScreen key="terms" storeOverrides={storeOverrides} selectedStoreIds={selectedStoreIds} />,
     <AnalyticsScreen key="analytics" storeOverrides={storeOverrides} selectedStoreIds={selectedStoreIds} />,
