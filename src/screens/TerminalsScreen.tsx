@@ -16,7 +16,7 @@ const relativeTime = (date: Date) => {
 };
 
 const statusColor: Record<string, string> = {
-  active: 'bg-teal',
+  active: 'bg-accent',
   recent: 'bg-amber',
   dormant: 'bg-muted-foreground/40',
 };

@@ -14,6 +14,9 @@ const SetupWizardScreen = ({ onComplete, stores }: SetupWizardScreenProps) => {
   const [storeNameOverrides, setStoreNameOverrides] = useState<Record<string, string>>({});
   const [pinCode, setPinCode] = useState('');
   const [pinConfirm, setPinConfirm] = useState('');
+  const [pinEntry, setPinEntry] = useState<'first' | 'confirm'>('first');
+  const [firstPin, setFirstPin] = useState('');
+  const [pinsMatch, setPinsMatch] = useState(false);
   const [error, setError] = useState('');
 
   const steps = [
@@ -23,8 +26,9 @@ const SetupWizardScreen = ({ onComplete, stores }: SetupWizardScreenProps) => {
   ];
 
   const canProceed = () => {
-    if (step === 0) return selectedStoreIds.length > 0; // At least one store
-    return true; // Steps 1 and 2 are optional
+    if (step === 0) return selectedStoreIds.length > 0; // At least one site
+    if (step === 2) return pinsMatch; // PIN screen requires match for get started
+    return true; // Step 1 is optional
   };
 
   const handleSkip = () => {
@@ -42,18 +46,6 @@ const SetupWizardScreen = ({ onComplete, stores }: SetupWizardScreenProps) => {
       return;
     }
 
-    if (step === 2) {
-      // PIN validation
-      if (pinCode && pinCode !== pinConfirm) {
-        setError('PINs do not match');
-        return;
-      }
-      if (pinCode && pinCode.length < 4) {
-        setError('PIN must be at least 4 digits');
-        return;
-      }
-    }
-
     if (step < steps.length - 1) {
       setStep(step + 1);
       setError('');
@@ -63,7 +55,51 @@ const SetupWizardScreen = ({ onComplete, stores }: SetupWizardScreenProps) => {
   };
 
   const completeWizard = () => {
-    onComplete(selectedStoreIds, storeNameOverrides, pinCode.length > 0);
+    onComplete(selectedStoreIds, storeNameOverrides, pinsMatch);
+  };
+
+  const handlePinInput = (num: string) => {
+    if (pinEntry === 'first' && firstPin.length < 6) {
+      const updated = firstPin + num;
+      setFirstPin(updated);
+      if (updated.length === 6) {
+        setPinEntry('confirm');
+        setError('Please re-enter the PIN to confirm');
+      }
+      return;
+    }
+
+    if (pinEntry === 'confirm' && pinCode.length < 6) {
+      const updated = pinCode + num;
+      setPinCode(updated);
+      if (updated.length === 6) {
+        if (updated === firstPin) {
+          setPinsMatch(true);
+          setError('PIN matched successfully');
+        } else {
+          setPinsMatch(false);
+          setFirstPin('');
+          setPinCode('');
+          setPinEntry('first');
+          setError('PINs do not match. Start again.');
+        }
+      }
+    }
+  };
+
+  const handlePinBackspace = () => {
+    if (pinEntry === 'first') {
+      setFirstPin(firstPin.slice(0, -1));
+    } else {
+      setPinCode(pinCode.slice(0, -1));
+      setPinsMatch(false);
+    }
+  };
+
+  const handlePinConfirmClick = () => {
+    if (firstPin.length === 6) {
+      setPinEntry('confirm');
+    }
   };
 
   const toggleStore = (storeId: string) => {
@@ -177,38 +213,74 @@ const SetupWizardScreen = ({ onComplete, stores }: SetupWizardScreenProps) => {
           )}
 
           {step === 2 && (
-            <motion.div key="step-2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-4">
+            <motion.div key="step-2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
               <p className="text-sm text-muted-foreground">
-                A PIN adds an extra layer of security. You can set one now or skip this step.
+                A 6-digit PIN adds an extra layer of security. You can set one now or skip this step.
               </p>
 
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground block mb-2">PIN (4+ digits)</label>
-                <div className="relative">
-                  <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                  <input
-                    type="password"
-                    value={pinCode}
-                    onChange={e => setPinCode(e.target.value)}
-                    className="w-full pl-9 pr-4 py-3 rounded-xl bg-card border border-border text-sm focus:outline-none focus:ring-2 focus:ring-accent/40"
-                    placeholder="Enter PIN"
-                  />
+              {/* PIN Entry Display */}
+              <div className="text-center space-y-4">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                  {pinEntry === 'first' ? 'Enter your 6-digit PIN' : 'Confirm your PIN'}
+                </p>
+
+                {/* Pin Dots */}
+                <div className="flex justify-center gap-3">
+                  {Array.from({ length: 6 }).map((_, i) => {
+                    const current = pinEntry === 'first' ? firstPin : pinCode;
+                    const filled = i < current.length;
+                    return (
+                      <motion.div key={i}
+                        initial={{ scale: 0.8 }}
+                        animate={{ scale: filled ? 1 : 0.8, opacity: filled ? 1 : 0.3 }}
+                        className={`w-12 h-12 rounded-full border-2 transition-all ${
+                          filled ? 'bg-accent border-accent' : 'border-muted bg-card'
+                        }`}
+                      />
+                    );
+                  })}
                 </div>
               </div>
 
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground block mb-2">Confirm PIN</label>
-                <div className="relative">
-                  <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                  <input
-                    type="password"
-                    value={pinConfirm}
-                    onChange={e => setPinConfirm(e.target.value)}
-                    className="w-full pl-9 pr-4 py-3 rounded-xl bg-card border border-border text-sm focus:outline-none focus:ring-2 focus:ring-accent/40"
-                    placeholder="Confirm PIN"
-                  />
-                </div>
+              {/* Number Pad */}
+              <div className="grid grid-cols-3 gap-2">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+                  <button key={num}
+                    onClick={() => handlePinInput(num.toString())}
+                    disabled={(pinEntry === 'first' && firstPin.length >= 6) || (pinEntry === 'confirm' && pinCode.length >= 6)}
+                    className="py-4 bg-secondary border border-border rounded-xl font-semibold text-lg active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary/80">
+                    {num}
+                  </button>
+                ))}
+                <button
+                  onClick={() => handlePinInput('0')}
+                  disabled={(pinEntry === 'first' && firstPin.length >= 6) || (pinEntry === 'confirm' && pinCode.length >= 6)}
+                  className="col-span-3 py-4 bg-secondary border border-border rounded-xl font-semibold text-lg active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary/80">
+                  0
+                </button>
               </div>
+
+              {/* Backspace Button */}
+              <button onClick={handlePinBackspace}
+                className="w-full py-3 bg-secondary border border-border rounded-xl font-semibold text-sm active:scale-95 transition-transform hover:bg-secondary/80">
+                ← Clear Last
+              </button>
+
+              {/* Pin Status Messages */}
+              {pinEntry === 'confirm' && pinCode.length > 0 && !pinsMatch && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-3 bg-coral/10 border border-coral/20 rounded-lg">
+                  <p className="text-xs text-coral font-medium">PINs don't match. Try again.</p>
+                </motion.div>
+              )}
+
+              {/* Confirm Button (only shown when first pin is 6 digits) */}
+              {pinEntry === 'first' && firstPin.length === 6 && (
+                <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                  onClick={handlePinConfirmClick}
+                  className="w-full py-3 bg-accent text-accent-foreground rounded-xl font-semibold text-sm active:scale-95 transition-transform">
+                  Proceed to Confirm
+                </motion.button>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -230,7 +302,7 @@ const SetupWizardScreen = ({ onComplete, stores }: SetupWizardScreenProps) => {
         </button>
         <button
           onClick={handleNext}
-          disabled={!canProceed()}
+          disabled={!canProceed() || (step === 2 && !pinsMatch && pinEntry === 'confirm')}
           className="flex-1 flex items-center justify-center gap-2 py-3 bg-accent text-accent-foreground rounded-xl font-semibold text-sm active:scale-[0.97] transition-transform disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {step === steps.length - 1 ? 'Get Started' : 'Next'}

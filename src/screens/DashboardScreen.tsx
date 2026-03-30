@@ -82,8 +82,8 @@ const DashboardScreen = ({ storeOverrides, onNavigate }: { storeOverrides: Recor
             <p className="text-xs text-muted-foreground mb-1">Total Sales</p>
             <AnimatedCounter target={metrics.totalSales} prefix="R " decimals={2} className="text-lg font-bold text-foreground" />
             <div className="flex items-center gap-1 mt-2">
-              <TrendingUp size={12} className="text-teal" />
-              <span className="text-[10px] text-teal font-medium">+12.5%</span>
+              <TrendingUp size={12} className="text-green" />
+              <span className="text-[10px] text-green font-medium">+12.5%</span>
             </div>
           </motion.div>
 
@@ -102,7 +102,7 @@ const DashboardScreen = ({ storeOverrides, onNavigate }: { storeOverrides: Recor
               <div className="relative w-10 h-10">
                 <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
                   <circle cx="18" cy="18" r="15" fill="none" stroke="hsl(var(--muted))" strokeWidth="3" />
-                  <motion.circle cx="18" cy="18" r="15" fill="none" stroke="hsl(var(--teal))" strokeWidth="3"
+                  <motion.circle cx="18" cy="18" r="15" fill="none" stroke="hsl(var(--accent))" strokeWidth="3"
                     strokeDasharray="94.2" initial={{ strokeDashoffset: 94.2 }}
                     animate={{ strokeDashoffset: 94.2 * (1 - metrics.approvalRate / 100) }}
                     transition={{ duration: 1.2, ease: 'easeOut' }} strokeLinecap="round" />

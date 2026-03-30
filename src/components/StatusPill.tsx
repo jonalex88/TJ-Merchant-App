@@ -6,7 +6,7 @@ interface StatusPillProps {
 
 const StatusPill = ({ status }: StatusPillProps) => {
   const styles = {
-    Approved: 'bg-teal/15 text-teal',
+    Approved: 'bg-green/15 text-green',
     Declined: 'bg-coral/15 text-coral',
     Pending: 'bg-amber/15 text-amber',
   };

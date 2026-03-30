@@ -18,7 +18,7 @@
     --secondary-foreground: 213 39% 11%;
     --muted: 210 15% 94%;
     --muted-foreground: 215 14% 46%;
-    --accent: 166 100% 39%;
+    --accent: 213 76% 46%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
@@ -26,6 +26,7 @@
     --input: 214 20% 90%;
     --ring: 166 100% 39%;
     --radius: 1rem;
+    --green: 120 100% 45%;
     --coral: 0 72% 55%;
     --amber: 38 92% 55%;
     --navy: 213 39% 11%;
